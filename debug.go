@@ -76,6 +76,10 @@ func Enable(pattern string) {
 // Debug creates a debug function for `name` which you call
 // with printf-style arguments in your application or library.
 func Debug(name string) DebugFunction {
+	DebugWithFormat(name, nil)
+}
+
+func DebugWithTimeFormat(name string, timeFormat string) DebugFunction {
 	prevGlobal := time.Now()
 	color := colors[rand.Intn(len(colors))]
 	prev := time.Now()
@@ -89,7 +93,7 @@ func Debug(name string) DebugFunction {
 			return
 		}
 
-		d := deltas(prevGlobal, prev, color)
+		d := deltas(prevGlobal, prev, color, timeFormat)
 		fmt.Fprintf(writer, d+" \033["+color+"m"+name+"\033[0m - "+format+"\n", args...)
 		prevGlobal = time.Now()
 		prev = time.Now()
@@ -97,11 +101,14 @@ func Debug(name string) DebugFunction {
 }
 
 // Return formatting for deltas.
-func deltas(prevGlobal, prev time.Time, color string) string {
+func deltas(prevGlobal, prev time.Time, color string, timeFormat) string {
 	now := time.Now()
 	global := now.Sub(prevGlobal).Nanoseconds()
 	delta := now.Sub(prev).Nanoseconds()
-	ts := now.UTC().Format("15:04:05.000")
+	if timeFormat == nil {
+		timeFormat = "15:04:05.000"
+	}
+	ts := now.UTC().Format(timeFormat)
 	deltas := fmt.Sprintf("%s %-6s \033["+color+"m%-6s", ts, humanizeNano(global), humanizeNano(delta))
 	return deltas
 }
