@@ -76,7 +76,7 @@ func Enable(pattern string) {
 // Debug creates a debug function for `name` which you call
 // with printf-style arguments in your application or library.
 func Debug(name string) DebugFunction {
-	DebugWithTimeFormat(name, nil)
+	return DebugWithTimeFormat(name, "")
 }
 
 func DebugWithTimeFormat(name string, timeFormat string) DebugFunction {
@@ -101,11 +101,11 @@ func DebugWithTimeFormat(name string, timeFormat string) DebugFunction {
 }
 
 // Return formatting for deltas.
-func deltas(prevGlobal, prev time.Time, color string, timeFormat) string {
+func deltas(prevGlobal, prev time.Time, color string, timeFormat string) string {
 	now := time.Now()
 	global := now.Sub(prevGlobal).Nanoseconds()
 	delta := now.Sub(prev).Nanoseconds()
-	if timeFormat == nil {
+	if timeFormat == "" {
 		timeFormat = "15:04:05.000"
 	}
 	ts := now.UTC().Format(timeFormat)
