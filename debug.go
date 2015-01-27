@@ -76,7 +76,7 @@ func Enable(pattern string) {
 // Debug creates a debug function for `name` which you call
 // with printf-style arguments in your application or library.
 func Debug(name string) DebugFunction {
-	DebugWithFormat(name, nil)
+	DebugWithTimeFormat(name, nil)
 }
 
 func DebugWithTimeFormat(name string, timeFormat string) DebugFunction {
