@@ -109,7 +109,7 @@ func deltas(prevGlobal, prev time.Time, color string, timeFormat string) string 
 		timeFormat = "15:04:05.000"
 	}
 	ts := now.UTC().Format(timeFormat)
-	deltas := fmt.Sprintf("%s %-6s \033["+color+"m%-6s", ts, humanizeNano(global), humanizeNano(delta))
+	deltas := fmt.Sprintf("%*s %-6s \033["+color+"m%-6s", -len(timeFormat), ts, humanizeNano(global), humanizeNano(delta))
 	return deltas
 }
 
